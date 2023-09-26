@@ -16,7 +16,7 @@ Cyber Security Analyst - DFIR - Blue Team :penguin:
 - :peach: I'm currently learning GIAC Certificates !
 - :tangerine: I often lose my temper doing bug bounty
 - :watermelon: You can reach me via linkedin
-- :meat_on_bone: Fun fact, I love linux \o/
+  
 <p align="center">
     <a href="https://github.com/0xdfir-jutsu" target="_blank"><img alt="GitHub" src="https://img.shields.io/badge/-@0xdfir-jutsu?style=flat-square&logo=GitHub&logoColor=white"></a>
     <a href="https://www.linkedin.com/in/ngocvuongcybersec/" target="_blank"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=Linkedin&logoColor=white"></a>
@@ -24,6 +24,3 @@ Cyber Security Analyst - DFIR - Blue Team :penguin:
 </p>
 
 ---
-
-[website]: [https://0xdfir-jutsu.github.io](https://0xdfir-jutsu.github.io/)
-
