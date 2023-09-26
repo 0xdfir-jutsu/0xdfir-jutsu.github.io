@@ -11,7 +11,7 @@ Cyber Security Analyst - DFIR - Blue Team :penguin:
 
 ## :name_badge: #whoami!
 <img align="right" src="https://media.giphy.com/media/onOWJOc7U5GAE/giphy.gif" />
-Jutsu - SOC Analyst
+- Jutsu - SOC Analyst
 
 - :peach: I'm currently learning GIAC Certificates !
 - :tangerine: I often lose my temper doing bug bounty
