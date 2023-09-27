@@ -5,6 +5,7 @@ categories: [DFIR, SIEM, Security, Email Phishing, Analyst]
 tags: [Email Phishing, Security, SOC]     # TAG names should always be lowercase
 ---
 - ![Phishing Email Meme](https://kratikal.com/blog/wp-content/uploads/2019/09/Phishing-image-meme.jpg)
+
 ## 1.Email Threat Types.
 - Email threats are every threat your environment faces when deciding to use an email service. They are 
 not limited to phishing emails only; some attackers also use email for blackmailing, information leakage, 
@@ -61,3 +62,4 @@ The hops that the email passes should be noted that each hop adds a header to th
 contains at least the server name, server IP, and email processing date and time of the email server.
 
 ### 2.2.Email Header Analysis.
+   - .... Wait
