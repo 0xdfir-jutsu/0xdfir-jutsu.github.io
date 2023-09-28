@@ -20,7 +20,7 @@ timezone: Asia/Ho_Chi_Minh
 
 title: 0xdfir Jutsu # the main title
 
-tagline: DFIR, BlueTeam # it will display as the sub-title
+tagline: DFIR, BlueTeam, Malware Analyst # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   Blue Team technical writing.
@@ -32,7 +32,7 @@ github:
   username: 0xdfir-jutsu # change to your github username
 
 twitter:
-  username: 0xdfir-jutsu # change to your twitter username
+  username: Jutsu0xdfir # change to your twitter username
 
 social:
   # Change to your full name.
@@ -41,7 +41,7 @@ social:
   email: vuongbaongoc711@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/0xdfir-jutsu # change to your twitter homepage
+    - https://twitter.com/Jutsu0xdfir # change to your twitter homepage
     - https://github.com/0xdfir-jutsu # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
@@ -76,7 +76,7 @@ theme_mode: # [light|dark]
 img_cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://i.pinimg.com/564x/36/89/cc/3689cc1524aaef449ecaa3b5ccb5e1ad.jpg
+avatar: https://i.pinimg.com/564x/fb/84/ac/fb84ace1de98b0f8ca4b60b995c09425.jpg
 
 # boolean type, the global switch for TOC in posts.
 toc: true

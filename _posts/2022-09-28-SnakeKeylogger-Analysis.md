@@ -5,7 +5,9 @@ categories: [DFIR, SIEM, Security, Email Phishing, Analyst, CVE-2017-11882, Malw
 tags: [Email Phishing, Security, SOC, CVE-2017-11882, SnakeKeylogger]     # TAG names should always be lowercase
 ---
 
-- ![Phishing Email Meme](https://miro.medium.com/v2/resize:fit:620/1*a1wCMVt1O3Dh-1efGILVHA.jpeg)
+<p align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:620/1*a1wCMVt1O3Dh-1efGILVHA.jpeg" />
+</p>
 
 ## 1. Brief Introduction
 - The initial delivery was via email.
@@ -19,6 +21,7 @@ tags: [Email Phishing, Security, SOC, CVE-2017-11882, SnakeKeylogger]     # TAG 
 ## 2. Diving into the initial document
 - We are going to use oleid to see if the document is encrypted, has VBA Macros / XLM Macros or External Relationships embedded.
 - The oletools suite is a package of python tools to analyze Microsoft OLE2 files (also called Structured Storage, Compound File Binary Format or Compound Document File Format), such as Microsoft Office documents or Outlook messages, mainly for malware analysis and debugging.
+
 ```
 remnux@remnux:~/Desktop/Malz$ oleid e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac.rtf 
 XLMMacroDeobfuscator: pywin32 is not installed (only is required if you want to use MS Excel)
@@ -47,8 +50,10 @@ Relationships       |                    |          |such as remote templates,
                     |                    |          |remote OLE objects, etc   
 --------------------+--------------------+----------+--------------------------
 ```
+
 - Many malicious RTF files are obfuscated, making it difficult for tools like rtfobj or rtfdump to accurately identify OLE objects. In particular, rtfdump may encounter issues and display the message "Not a well-formed OLE object." However, rtfdump does offer an option that can assist in decoding objects that are not well-formed.
 - Upon closer examination of this sample, rtfdump fails to identify any OLE objects. However, the presence of the "h=" indicator indicates the presence of numerous hexadecimal characters. We will focus our attention on Level 4, as it contains the innermost nested object with 15067 hex characters. If we are unable to find what we are looking for, we can always explore the other objects.
+
 ```
 remnux@remnux:~/Desktop/Malz$ rtfdump.py e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac.rtf 
     1 Level  1        c=    2 p=00000000 l=   15181 h=    8316;      28 b=       0   u=       1 \rtf1
@@ -60,13 +65,17 @@ remnux@remnux:~/Desktop/Malz$ rtfdump.py e9e38b2108b6dc9911fac6c1e6bf7b8fa017847
     7    Level  4     c=    1 p=00000207 l=     200 h=       0;      27 b=       0   u=       0 \object
     8     Level  5    c=    0 p=00000281 l=      77 h=       0;      22 b=       0   u=       0 
 ```
+
 - a quick breakdown of the below command is as follows:
+
 ```
 -s3: select item nr for dumping, in our case Level 3
 -H: decode hexadecimal data
 ```
+
 - I want to focus on the following lines, executing this command just showed a bunch of blob, nothing is readable, and left me going back to rtfdump’s documents trying to figure out why it can’t properly decode these hex values.
 - The word hexshift caught my eye, the parameter in rtfdump is ``--hexshift shift one nibble``, which made so much sense, let’s execute the same command with the hexshift and look at the output and also draw it out:
+
 ```
 remnux@remnux:~/Desktop/Malz$ rtfdump.py -s4 -H e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac.rtf 
 <snip>
@@ -85,7 +94,9 @@ remnux@remnux:~/Desktop/Malz$ rtfdump.py -s4 -H e9e38b2108b6dc9911fac6c1e6bf7b8f
 000004E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
 <snip>
 ```
+
 - So what does shift one nibble mean? ``-S`` , You should to use shift if u don't see anything Root
+
 ```
 00000460: FF FF FF F5 20 06 F0 06  F0 07 40 02 00 04 50 06  .... .....@...P.
                     | 
@@ -93,22 +104,29 @@ remnux@remnux:~/Desktop/Malz$ rtfdump.py -s4 -H e9e38b2108b6dc9911fac6c1e6bf7b8f
                       |
 00000460: FF FF FF FF 52 00 6F 00  6F 00 74 00 20 00 45 00  ....R.o.o.t. .E.
 ```
+
 - Let’s dump that section and also dump it in raw format using the ``-d`` parameter:
+
 ```
 remnux@remnux:~/Desktop/Malz$ rtfdump.py -s4 -H e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac.rtf -d > malware.dump 
 ```
+
 ```
 @remnux:~/Desktop/Malz$ oledump.py malware.dump 
 Error: malware.dump is nota valid OLE file.
 ```
+
 - Let's check file dump, file dump not matches header of OLE file.
 - To extract from the COM object header onward, we can do the following:
+
 ```
 remnux@remnux:~/Desktop/Malz$ rtfdump.py -s4 -H e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac.rtf -c 0x36: -d > malware.dump 
 remnux@remnux:~/Desktop/Malz$ oledump.py malware.dump 
   1:      1794 '\x01olE10naTIve'
 ```
+
 - I was about to mention that SnakeKeylogger makes use of CVE-2017-11882, but there is another tool from oletools called oledir, which displays all the directory entries of an OLE file. However this CLSID 0002CE02-0000-0000-C000-000000000046 is a clear giveaway of this CVE being at play here.
+
 ```
 remnux@remnux:~/Desktop/Malz$ oledir malware.dump 
 oledir 0.54 - http://decalage.info/python/oletools
@@ -128,7 +146,8 @@ id  |Name                        |Size  |CLSID
     |                            |      |to CVE-2017-11882 or CVE-2018-0802)   
 1   |\x01olE10naTIve             |1794  |                                     
 ```
-## 2. Detecting the shellcode
+
+## 3. Detecting the shellcode
 - For doing this let’s make use of a tool called scdbgc, a brief explanation of that the tool is:
 
 > scdbg is a shellcode analysis application built around the libemu emulation library.
@@ -136,11 +155,14 @@ id  |Name                        |Size  |CLSID
 - Basically it analyzes shellcode by emulating its execution. You have 2 versions of this tool, scdbgc is the commandline equivalent of scdbg.
 
 - So we will use 2 parameters with scdbgc:
+
 ```
 /f fpath  load shellcode from file - accepts binary, %u, \x, %x, hex blob
 /findsc   detect possible shellcode buffers (brute force) (supports -dump, -disasm)
 ```
+
 - Result ``http://107.172.61.141/400/vbc.exe``
+
 ```
 remnux@remnux:~/Desktop/Malz$ scdbgc /f malware.dump -findsc
 Loaded 1008 bytes from file malware.dump
@@ -172,10 +194,13 @@ Execution starts at file offset 93c
 401e04	unhooked call to shell32.ShellExecuteW	step=39675
 
 Stepcount 39675
-
 ```
+
 - And the end, we need to analyst file ``vbc.exe`` to get more IOCs.
-- Sample file malware : https://bazaar.abuse.ch/sample/e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac/
+
+- Sample file malware: 
+[Link Sample Malware](https://bazaar.abuse.ch/sample/e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac/ 'Sample Malware File')
+
 ```
 IOCs: 
 SHA256 hash:	 e9e38b2108b6dc9911fac6c1e6bf7b8fa017847f56ceeab19b96f187db9e5bac
