@@ -5,9 +5,7 @@ categories: [DFIR, SIEM, Security, Email Phishing, Analyst, CVE-2017-11882, Malw
 tags: [Email Phishing, Security, SOC, CVE-2017-11882, SnakeKeylogger]     # TAG names should always be lowercase
 ---
 
-<p align="center">
-  <img src="https://miro.medium.com/v2/resize:fit:620/1*a1wCMVt1O3Dh-1efGILVHA.jpeg" />
-</p>
+![image hello](https://miro.medium.com/v2/resize:fit:620/1*a1wCMVt1O3Dh-1efGILVHA.jpeg)
 
 ## 1. Brief Introduction
 - The initial delivery was via email.
